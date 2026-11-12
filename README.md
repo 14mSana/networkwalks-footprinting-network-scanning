@@ -33,43 +33,21 @@ observed and screenshots of the practical work. A separate
 `theHarvester` exercise against `microsoft.com` is included only as a
 tool demonstration; it is not a finding about `networkwalks.com`.
 
-## 2. Tools Used
-
-  -----------------------------------------------------------------------
-  Tool                                Purpose
-  ----------------------------------- -----------------------------------
-  Kali Linux                          Environment used for reconnaissance
-                                      and OSINT activities
-
-  WHOIS                               Collect domain registration
-                                      details, registrar and name servers
-
-  WhatWeb                             Identify technologies used by a
-                                      website
-
-  `nslookup`                          Resolve a domain name to an IP
-                                      address
-
-  cURL                                Inspect HTTP response headers
-
-  WAFW00F                             Identify whether a Web Application
-                                      Firewall is detected
-
-  DNSRecon                            Enumerate DNS records such as NS,
-                                      MX, TXT and SRV
-
-  Zenmap / Nmap                       Discover active hosts on a local
-                                      subnet
-
-  `ip link`                           Display network interface and MAC
-                                      address information
-
-  Maltego                             Visualize relationships between
-                                      domain and email entities
-
-  theHarvester                        Collect publicly available OSINT
-                                      from supported search sources
-  -----------------------------------------------------------------------
+2. Tools Used
+   
+| Tool | Purpose |
+|---|---|
+| Kali Linux | Environment used for reconnaissance and OSINT activities |
+| WHOIS | Collect domain registration details, registrar and name servers |
+| whatweb | Identify technologies used by a website |
+| `nslookup` | Resolve a domain name to an IP address |
+| curl -I | Inspect HTTP response headers |
+| wafw00f | Identify whether a Web Application Firewall is detected |
+| dnsrecon | Enumerate DNS records such as NS, MX, TXT and SRV |
+| Zenmap / Nmap | Discover active hosts on a local subnet |
+| `ip link` | Display network interface and MAC address information |
+| Maltego | Visualize relationships between domain and email entities |
+| theHarvester | Collect publicly available OSINT from supported search sources |
 
 ## 3. Activities Performed
 
@@ -262,45 +240,14 @@ messages](screenshots/theharvester-api-errors.png)
 
 ## 4. Risk Analysis / Impact
 
-The following are potential risks based on the information collected.
-These observations are not confirmed vulnerabilities.
-
-  -----------------------------------------------------------------------
-  \#                Observation       Potential impact  Risk
-  ----------------- ----------------- ----------------- -----------------
-  1                 Web technology    May help          Medium
-                    and version       attackers         
-                    information is    identify          
-                    visible.          technologies for  
-                                      further research. 
-
-  2                 Public IP address Provides          Low
-                    identified        information about 
-                    through DNS.      the website's     
-                                      hosting address.  
-
-  3                 HTTP response     May assist        Low
-                    headers reveal    technology        
-                    server details.   fingerprinting.   
-
-  4                 DNS records       Can help build a  Medium
-                    reveal hosting    broader           
-                    and mail          infrastructure    
-                    infrastructure.   profile.          
-
-  5                 ModSecurity WAF   Reveals the WAF   Low
-                    identified by     product in use;   
-                    WAFW00F.          detection does    
-                                      not establish     
-                                      whether its rules 
-                                      are effective.    
-
-  6                 Three live hosts  Unknown devices   Low
-                    discovered on the on a network      
-                    virtual LAN.      should be         
-                                      identified and    
-                                      verified.         
-  -----------------------------------------------------------------------
+| # | Observation | Potential impact | Risk |
+|---:|---|---|---|
+| 1 | Web technology and version information is visible. | May help attackers identify technologies for further research. | Medium |
+| 2 | Public IP address identified through DNS. | Provides information about the website's hosting address. | Low |
+| 3 | HTTP response headers reveal server details. | May assist technology fingerprinting. | Low |
+| 4 | DNS records reveal hosting and mail infrastructure. | Can help build a broader infrastructure profile. | Medium |
+| 5 | ModSecurity WAF identified by WAFW00F. | Reveals the WAF product in use; detection does not establish whether its rules are effective. | Low |
+| 6 | Three live hosts discovered on the virtual LAN. | Unknown devices on a network should be identified and verified. | Low |
 
 The presence of technology information, DNS records or live hosts does
 not by itself mean that a system is vulnerable. No exploitation or
