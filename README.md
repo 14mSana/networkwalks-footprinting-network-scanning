@@ -193,8 +193,7 @@ layout.
 ip link show eth0
 ```
 
-**Observed result:** The `eth0` interface was UP. Its MAC address was
-`08:00:27:b0:bc:28`.
+**Observed result:** The `eth0` interface was UP. Its MAC address.
 
 ![Kali interface](screenshots/kali-interface.png)
 
