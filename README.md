@@ -16,12 +16,33 @@
 > Exploitation, unauthorized access, privilege escalation,
 > denial-of-service, brute-force/password attacks, data access or
 > modification, and social engineering are outside the permitted scope.
-> Keep the authorization letter and any findings confidential as
-> required by the program.
+> Networkwalks has permitted public sharing of the domain-related
+> information documented here. The authorization letter itself is not
+> included in this repository.
 
 ------------------------------------------------------------------------
 
-## 1. Introduction
+## 1. Executive Summary
+
+This practical assessment focused on authorized footprinting and
+public-source OSINT for `networkwalks.com`, together with host discovery
+on my own virtual lab network (`10.0.0.0/24`). I used WHOIS, WhatWeb,
+`nslookup`, cURL, WAFW00F, DNSRecon, Maltego, theHarvester and
+Zenmap/Nmap to collect and review information.
+
+The activities identified publicly observable domain, DNS and web
+technology information. WAFW00F detected ModSecurity, Maltego returned
+one domain-to-email relationship, and theHarvester's Baidu source
+returned no results in the recorded run. The all-source theHarvester
+run was limited by unavailable or invalid provider API keys. Zenmap
+discovered three live hosts on the local virtual subnet.
+
+No exploitation, port scanning of Networkwalks' public infrastructure,
+or vulnerability validation was performed. The observations in this
+report should therefore be treated as reconnaissance results, not
+confirmed vulnerabilities.
+
+## 2. Introduction
 
 As part of my cybersecurity internship practical work, I used Kali Linux
 tools to gather publicly observable information about
@@ -29,27 +50,70 @@ tools to gather publicly observable information about
 own virtual LAN.
 
 This report documents the tools I used, their purpose, the results I
-observed and screenshots of the practical work. A separate
-`theHarvester` exercise against `microsoft.com` is included only as a
-tool demonstration; it is not a finding about `networkwalks.com`.
+observed and screenshots of the practical work, including a
+`theHarvester` OSINT exercise against `networkwalks.com`.
 
-2. Tools Used
-   
+## 3. Scope of Assessment
+
+**In-scope activities documented in this report**
+
+- Passive/publicly observable footprinting and reconnaissance for
+  `networkwalks.com`.
+- DNS lookups and DNS record enumeration for the domain.
+- Web technology and HTTP-header identification.
+- Public-source OSINT using Maltego and theHarvester.
+- Ping/host discovery on my own virtual lab subnet:
+  `10.0.0.0/24`.
+
+**Out of scope / not performed**
+
+- Exploitation, gaining unauthorized access or privilege escalation.
+- Denial-of-service, brute-force or password attacks.
+- Accessing, copying, modifying or deleting data.
+- Social engineering.
+- Port scanning or service detection against Networkwalks' public
+  infrastructure.
+- Testing systems outside the authorized scope.
+
+The local Zenmap scan in this report applies only to the intern's
+virtual lab network and must not be interpreted as a scan of
+Networkwalks' infrastructure.
+
+## 4. Tools Used
+
 | Tool | Purpose |
 |---|---|
 | Kali Linux | Environment used for reconnaissance and OSINT activities |
 | WHOIS | Collect domain registration details, registrar and name servers |
-| whatweb | Identify technologies used by a website |
+| WhatWeb | Identify technologies used by a website |
 | `nslookup` | Resolve a domain name to an IP address |
-| curl -I | Inspect HTTP response headers |
-| wafw00f | Identify whether a Web Application Firewall is detected |
-| dnsrecon | Enumerate DNS records such as NS, MX, TXT and SRV |
+| cURL | Inspect HTTP response headers |
+| WAFW00F | Identify whether a Web Application Firewall is detected |
+| DNSRecon | Enumerate DNS records such as NS, MX, TXT and SRV |
 | Zenmap / Nmap | Discover active hosts on a local subnet |
 | `ip link` | Display network interface and MAC address information |
 | Maltego | Visualize relationships between domain and email entities |
 | theHarvester | Collect publicly available OSINT from supported search sources |
 
-## 3. Activities Performed
+## 5. Methodology
+
+The work followed this sequence:
+
+1. **Domain footprinting:** collected registration information and
+   identified publicly visible website technologies.
+2. **DNS enumeration:** resolved the domain and reviewed available DNS
+   records.
+3. **Web response review:** inspected HTTP response headers and checked
+   for WAF detection.
+4. **Public-source OSINT:** used Maltego and theHarvester to review
+   publicly indexed domain-related information.
+5. **Local network discovery:** used Zenmap/Nmap ping scan on the
+   authorized virtual lab subnet.
+6. **Documentation:** recorded commands, observations, evidence and
+   limitations. Findings were not treated as vulnerabilities unless
+   validated, and no exploitation was attempted.
+
+## 6. Activities Performed
 
 ### 3.1 Website Footprinting and Reconnaissance
 
@@ -163,11 +227,11 @@ nmap -sn 10.0.0.0/24
 
 **Observed results**
 
-  IP address   Observation
-  ------------ ----------------------------------------
-  `10.0.0.1`   Host up; QEMU virtual NIC
-  `10.0.0.2`   Host up; my Kali Linux machine
-  `10.0.0.7`   Host up; Oracle VirtualBox virtual NIC
+| IP address | Observation |
+|---|---|
+| `10.0.0.1` | Host up; QEMU virtual NIC |
+| `10.0.0.2` | Host up; my Kali Linux machine |
+| `10.0.0.7` | Host up; Oracle VirtualBox virtual NIC |
 
 -   Total addresses scanned: 256
 -   Live hosts discovered: 3
@@ -209,35 +273,41 @@ The transform returned one email entity.
 
 #### theHarvester
 
-I tested theHarvester against `microsoft.com` as a separate tool
-demonstration. These results are **not** findings about
-`networkwalks.com`.
+I ran theHarvester against `networkwalks.com` using two source
+configurations.
 
-**First command**
+**First command — Baidu**
 
-``` bash
-theHarvester -d microsoft.com -l 1000 -b baidu
+```bash
+theHarvester -d networkwalks.com -l 1000 -b baidu
 ```
 
 The Baidu search returned no IP addresses, email addresses, people or
-hosts.
+hosts in this run. This means the selected source did not return
+discoverable results; it does not prove that no public information
+about the domain exists.
 
-![theHarvester Baidu result](screenshots/theharvester-baidu.png)
+![theHarvester Networkwalks Baidu result](screenshots/theharvester-baidu.png)
 
-**Second command**
+**Second command — all configured sources**
 
-``` bash
-theHarvester -d microsoft.com -l 50 -b all
+```bash
+theHarvester -d networkwalks.com -l 50 -b all
 ```
 
-The all-source run showed that several sources could not be queried
-because API keys were missing or invalid, including BeVigil, Bitbucket,
-BuiltWith, Brave Search and Censys.
+The all-source run reported missing or invalid API-key configuration
+for several providers, including BeVigil, Bitbucket, BufferOverrun,
+BuiltWith, Brave Search, Censys, CriminalIP, DeHashed and DNSDumpster.
+Because these sources could not be queried successfully, this run
+cannot be treated as a complete OSINT result or as evidence that no
+records exist.
 
-![theHarvester API key
-messages](screenshots/theharvester-api-errors.png)
+![theHarvester Networkwalks API-key messages](screenshots/theharvester-api-errors.png)
 
-## 4. Risk Analysis / Impact
+## 7. Risk Analysis / Impact
+
+The following are potential risks based on the information collected.
+These observations are not confirmed vulnerabilities.
 
 | # | Observation | Potential impact | Risk |
 |---:|---|---|---|
@@ -252,7 +322,7 @@ The presence of technology information, DNS records or live hosts does
 not by itself mean that a system is vulnerable. No exploitation or
 vulnerability validation was performed.
 
-## 5. Recommendations
+## 8. Recommendations
 
 1.  Review publicly exposed technology information and limit unnecessary
     version disclosure.
@@ -271,7 +341,39 @@ vulnerability validation was performed.
 9.  Perform further security testing only with appropriate written
     authorization.
 
-## 6. Conclusion
+## 9. Testing Limitations
+
+- TheHarvester's Baidu source returned no results during the recorded
+  run. This does not establish that no public information exists.
+- Several theHarvester providers could not be queried because their
+  API keys were missing or invalid. The all-source run was therefore
+  incomplete.
+- The Zenmap scan was a ping/host-discovery scan of
+  `10.0.0.0/24`; it did not perform port scanning or service detection.
+- The Zenmap results describe the intern's virtual lab, not
+  Networkwalks' public infrastructure.
+- No exploitation, authenticated testing or vulnerability validation
+  was performed.
+- Results represent observations at the time of testing and may change.
+
+## 10. Evidence Register
+
+| Evidence ID | Activity | Evidence file |
+|---|---|---|
+| E01 | WHOIS domain lookup | `screenshots/whois.png` |
+| E02 | WhatWeb technology identification | `screenshots/whatweb.png` |
+| E03 | DNS resolution with nslookup | `screenshots/nslookup.png` |
+| E04 | HTTP headers with cURL | `screenshots/curl-headers.png` |
+| E05 | WAF detection with WAFW00F | `screenshots/wafw00f.png` |
+| E06 | DNS enumeration with DNSRecon | `screenshots/dnsrecon.png` |
+| E07 | Zenmap local host-discovery scan | `screenshots/zenmap-scan.png` |
+| E08 | Zenmap topology | `screenshots/zenmap-topology.png` |
+| E09 | Kali network interface details | `screenshots/kali-interface.png` |
+| E10 | Maltego domain/email relationship | `screenshots/maltego.png` |
+| E11 | theHarvester Baidu run for Networkwalks | `screenshots/theharvester-baidu.png` |
+| E12 | theHarvester provider/API-key messages | `screenshots/theharvester-api-errors.png` |
+
+## 11. Conclusion
 
 During this practical exercise, I used multiple Kali Linux tools to
 perform domain footprinting and OSINT, and Zenmap to discover devices on
