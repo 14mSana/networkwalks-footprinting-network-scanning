@@ -87,7 +87,7 @@ Networkwalks' infrastructure.
 | WHOIS | Collect domain registration details, registrar and name servers |
 | WhatWeb | Identify technologies used by a website |
 | `nslookup` | Resolve a domain name to an IP address |
-| cURL | Inspect HTTP response headers |
+| CURL | Inspect HTTP response headers |
 | WAFW00F | Identify whether a Web Application Firewall is detected |
 | DNSRecon | Enumerate DNS records such as NS, MX, TXT and SRV |
 | Zenmap / Nmap | Discover active hosts on a local subnet |
