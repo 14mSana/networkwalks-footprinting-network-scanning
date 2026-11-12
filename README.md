@@ -101,7 +101,7 @@ nslookup networkwalks.com
 
 ![nslookup output](screenshots/nslookup.png)
 
-#### cURL
+#### CURL
 
 **Command**
 
